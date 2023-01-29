@@ -2,6 +2,9 @@ import * as fs from "fs";
 import { csv2jsonAsync } from 'json-2-csv';
 import * as path from "path";
 
+export const FirebaseCollectionCountries = "countries";
+export const FirebaseCollectionCities = "cities";
+
 export interface IWorldCities {
     cityId: string;
     city: string;

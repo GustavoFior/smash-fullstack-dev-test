@@ -1,6 +1,6 @@
 import { Firestore } from '@google-cloud/firestore';
 import * as admin from 'firebase-admin';
-import { getFileData, IWorldCities } from '../../utils';
+import { FirebaseCollectionCities, FirebaseCollectionCountries, getFileData, IWorldCities } from '../../utils';
 
 const credential = require('./config/smash-firebase-admin-key.json');
 
@@ -42,7 +42,7 @@ export class FirestoreService {
             for(var country in listCountries) {
                 try {
                     var listCities: IWorldCities[] = listCountries[country]
-                    const docCountry = this.firestore.collection("countries").doc(country);
+                    const docCountry = this.firestore.collection(FirebaseCollectionCountries).doc(country);
 
                     docCountry.set({
                         id: country,
@@ -50,7 +50,7 @@ export class FirestoreService {
                     });
 
                     listCities.forEach((worldCity: IWorldCities) => {
-                        const docCity = docCountry.collection("cities").doc(worldCity.city);
+                        const docCity = docCountry.collection(FirebaseCollectionCities).doc(worldCity.city);
                         docCity.set(
                             {
                                 cityId: worldCity.cityId ?? '',
