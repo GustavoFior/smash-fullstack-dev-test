@@ -15,11 +15,11 @@ export class FirestoreService {
 
         this.firestore = admin.firestore();
 
-        // Rodar com Firebase Emulator
-        this.firestore.settings({
-            host: 'localhost:5002',
-            ssl: false,
-        });
+        //Rodar com Firebase Emulator
+        // this.firestore.settings({
+        //     host: 'localhost:5002',
+        //     ssl: false,
+        // });
     }
 
     private _groupByCountry(data: IWorldCities[]) {
@@ -34,32 +34,37 @@ export class FirestoreService {
     }
 
     public async setInitialData() {
-
         try {
             const fileData = await getFileData();
             var listCountries = this._groupByCountry(fileData);
+            var imported = 0;
 
             for(var country in listCountries) {
-                var listCities: IWorldCities[] = listCountries[country]
-                const docCountry = this.firestore.collection("countries").doc(country);
+                try {
+                    var listCities: IWorldCities[] = listCountries[country]
+                    const docCountry = this.firestore.collection("countries").doc(country);
 
-                docCountry.set({
-                    id: country
-                });
+                    docCountry.set({
+                        id: country,
+                        name: country,
+                    });
 
-                listCities.forEach((worldCity: IWorldCities) => {
-                    const docCity = docCountry.collection("cities").doc(worldCity.city);
-                    docCity.set(
-                        {
-                            cityId: worldCity.cityId ?? '',
-                            name: worldCity.city ?? '',
-                            state: worldCity.state ?? '',
-                        }
-                    );
-                });
+                    listCities.forEach((worldCity: IWorldCities) => {
+                        const docCity = docCountry.collection("cities").doc(worldCity.city);
+                        docCity.set(
+                            {
+                                cityId: worldCity.cityId ?? '',
+                                name: worldCity.city ?? '',
+                                state: worldCity.state ?? '',
+                            }
+                        );
+                        imported++;
+                    });
+                } catch(error) {
+                    console.log(`Error ao importar o país: ${error}`);
+                }
             }
-
-            console.log(`Importação finalizada com sucesso! (${fileData.length}) registros importados.`);
+            console.log(`Importação finalizada com sucesso! (${imported}) registros importados de (${fileData.length}).`);
         } catch(error) {
             console.log(`Error ao importar os dados do arquivo CSV: ${error}`);
         }

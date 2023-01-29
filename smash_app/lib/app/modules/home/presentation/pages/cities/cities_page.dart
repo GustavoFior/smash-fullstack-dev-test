@@ -5,21 +5,26 @@ import 'package:smash_app/app/modules/home/presentation/models/search_list_model
 import 'package:smash_app/app/modules/home/presentation/widgets/search_header.dart';
 import 'package:smash_app/app/modules/home/presentation/widgets/search_list.dart';
 
-import 'countries_controller.dart';
+import 'cities_controller.dart';
 
-class CountriesPage extends StatefulWidget {
-  const CountriesPage({super.key});
+class CitiesPage extends StatefulWidget {
+  final String countryId;
+
+  const CitiesPage({
+    super.key,
+    required this.countryId,
+  });
 
   @override
-  State<CountriesPage> createState() => _CountriesPageState();
+  State<CitiesPage> createState() => _CitiesPageState();
 }
 
-class _CountriesPageState extends State<CountriesPage> {
-  final _controller = Modular.get<CountriesController>();
+class _CitiesPageState extends State<CitiesPage> {
+  final _controller = Modular.get<CitiesController>();
 
   @override
   void initState() {
-    _controller.getCountries();
+    _controller.getCities(countryId: widget.countryId);
     super.initState();
   }
 
@@ -29,7 +34,7 @@ class _CountriesPageState extends State<CountriesPage> {
           child: Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: const Text('Country'),
+              title: const Text('City'),
             ),
             body: Padding(
               padding: const EdgeInsets.all(20),
@@ -48,14 +53,13 @@ class _CountriesPageState extends State<CountriesPage> {
                     child: ListView.builder(
                       itemCount: _controller.store.data?.length ?? 0,
                       itemBuilder: (context, index) {
-                        final country = _controller.store.data?[index];
+                        final city = _controller.store.data?[index];
                         return SearchList(
                           model: SearchListModel(
-                            id: country?.id ?? "",
-                            name: country?.name ?? "",
+                            id: city?.cityId ?? "",
+                            name: city?.name ?? "",
+                            state: city?.state ?? "",
                           ),
-                          onChanged: () => _controller
-                              .navigateCitiesPage((country?.id ?? "")),
                         );
                       },
                     ),

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -10,10 +9,11 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   // Configuração para rodar Firebase Firestore Emulator
-  FirebaseFirestore.instance.settings = const Settings(
-    persistenceEnabled: true,
-    host: "10.0.2.2:5002",
-  );
+  // FirebaseFirestore.instance.settings = const Settings(
+  //   persistenceEnabled: true,
+  //   host: "10.0.2.2:5002",
+  //   sslEnabled: false,
+  // );
 
   runApp(
     ModularApp(

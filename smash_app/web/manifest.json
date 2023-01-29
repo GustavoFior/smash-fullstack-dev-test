@@ -1,6 +1,6 @@
 {
-    "name": "smash_app",
-    "short_name": "smash_app",
+    "name": "Smash App",
+    "short_name": "Smash App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
